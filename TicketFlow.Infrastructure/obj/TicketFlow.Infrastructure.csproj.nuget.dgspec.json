@@ -1,0 +1,205 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Infrastructure/TicketFlow.Infrastructure.csproj": {}
+  },
+  "projects": {
+    "/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Application/TicketFlow.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Application/TicketFlow.Application.csproj",
+        "projectName": "TicketFlow.Application",
+        "projectPath": "/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Application/TicketFlow.Application.csproj",
+        "packagesPath": "/home/tacio/.nuget/packages/",
+        "outputPath": "/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Application/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/tacio/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "/usr/lib/dotnet/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Domain/TicketFlow.Domain.csproj": {
+                "projectPath": "/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Domain/TicketFlow.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/9.0.112/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Domain/TicketFlow.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Domain/TicketFlow.Domain.csproj",
+        "projectName": "TicketFlow.Domain",
+        "projectPath": "/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Domain/TicketFlow.Domain.csproj",
+        "packagesPath": "/home/tacio/.nuget/packages/",
+        "outputPath": "/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Domain/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/tacio/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "/usr/lib/dotnet/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/9.0.112/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Infrastructure/TicketFlow.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Infrastructure/TicketFlow.Infrastructure.csproj",
+        "projectName": "TicketFlow.Infrastructure",
+        "projectPath": "/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Infrastructure/TicketFlow.Infrastructure.csproj",
+        "packagesPath": "/home/tacio/.nuget/packages/",
+        "outputPath": "/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Infrastructure/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/tacio/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "/usr/lib/dotnet/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Application/TicketFlow.Application.csproj": {
+                "projectPath": "/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Application/TicketFlow.Application.csproj"
+              },
+              "/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Domain/TicketFlow.Domain.csproj": {
+                "projectPath": "/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Domain/TicketFlow.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/9.0.112/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
