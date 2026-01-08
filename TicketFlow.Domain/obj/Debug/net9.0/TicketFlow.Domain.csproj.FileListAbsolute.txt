@@ -9,3 +9,4 @@
 /home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Domain/obj/Debug/net9.0/refint/TicketFlow.Domain.dll
 /home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Domain/obj/Debug/net9.0/TicketFlow.Domain.pdb
 /home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Domain/obj/Debug/net9.0/ref/TicketFlow.Domain.dll
+/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Domain/obj/Debug/net9.0/TicketFlow.Domain.sourcelink.json

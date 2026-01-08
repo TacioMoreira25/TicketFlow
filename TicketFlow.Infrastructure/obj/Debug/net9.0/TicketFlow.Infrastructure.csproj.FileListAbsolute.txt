@@ -15,3 +15,4 @@
 /home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Infrastructure/obj/Debug/net9.0/refint/TicketFlow.Infrastructure.dll
 /home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Infrastructure/obj/Debug/net9.0/TicketFlow.Infrastructure.pdb
 /home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Infrastructure/obj/Debug/net9.0/ref/TicketFlow.Infrastructure.dll
+/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Infrastructure/obj/Debug/net9.0/TicketFlow.Infrastructure.sourcelink.json

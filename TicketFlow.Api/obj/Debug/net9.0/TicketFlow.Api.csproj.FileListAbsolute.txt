@@ -7,7 +7,6 @@
 /home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Api/bin/Debug/net9.0/TicketFlow.Api.dll
 /home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Api/bin/Debug/net9.0/TicketFlow.Api.pdb
 /home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Api/bin/Debug/net9.0/Humanizer.dll
-/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Api/bin/Debug/net9.0/Microsoft.AspNetCore.OpenApi.dll
 /home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Api/bin/Debug/net9.0/Microsoft.Bcl.AsyncInterfaces.dll
 /home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Api/bin/Debug/net9.0/Microsoft.Build.Locator.dll
 /home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Api/bin/Debug/net9.0/Microsoft.CodeAnalysis.dll
@@ -128,3 +127,8 @@
 /home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Api/obj/Debug/net9.0/TicketFlow.Api.pdb
 /home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Api/obj/Debug/net9.0/TicketFlow.Api.genruntimeconfig.cache
 /home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Api/obj/Debug/net9.0/ref/TicketFlow.Api.dll
+/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Api/obj/Debug/net9.0/TicketFlow.Api.sourcelink.json
+/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Api/bin/Debug/net9.0/Dapper.dll
+/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Api/bin/Debug/net9.0/Pipelines.Sockets.Unofficial.dll
+/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Api/bin/Debug/net9.0/StackExchange.Redis.dll
+/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Api/bin/Debug/net9.0/System.IO.Hashing.dll
