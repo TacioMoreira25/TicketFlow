@@ -31,6 +31,8 @@ public class Ticket
 
         Status = TicketStatus.Sold;
         OwnerName = ownerName;
+
+        Version = Guid.NewGuid();
     }
 
     protected Ticket() { }

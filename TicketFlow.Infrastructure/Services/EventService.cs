@@ -72,4 +72,45 @@ public class EventService : IEventService
 
         return evento;
     }
+
+    public async Task<bool> BuyTicketAsync(Guid ticketId, string ownerName)
+    {
+        // 1. Busca o ingresso pelo EF Core (com rastreamento)
+        var ticket = await _context.Tickets.FirstOrDefaultAsync(t => t.Id == ticketId);
+
+        if (ticket == null) return false;
+
+        try
+        {
+            // 2. Tenta vender (Regra de Negócio)
+            // Dentro do método Sell(), a gente atualiza o Guid "Version"
+            ticket.Sell(ownerName);
+            
+            // 3. Tenta Salvar
+            // O EF Core vai gerar: UPDATE Tickets SET Status = 'Sold', Version = 'NOVO_GUID' WHERE Id = X AND Version = 'GUID_ANTIGO'
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            // 4. Captura o conflito!
+            // Significa que entre o passo 1 e o 3, alguém mudou esse registro.
+            throw new Exception("Desculpe, este ingresso foi vendido para outra pessoa no último segundo.");
+        }
+    }
+
+    public async Task CreateTicketsAsync(Guid eventId, int quantity, decimal price)
+    {
+        var tickets = new List<Ticket>();
+
+        for (int i = 0; i < quantity; i++)
+        {
+            // Cria o ticket vinculado ao evento
+            tickets.Add(new Ticket(eventId, price));
+        }
+
+        // AddRange é muito mais rápido que adicionar um por um
+        await _context.Tickets.AddRangeAsync(tickets);
+        await _context.SaveChangesAsync();
+    }
 }

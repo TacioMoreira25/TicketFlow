@@ -12,4 +12,7 @@ public interface IEventService
 
     // Retorna "EventResponse?" (pode ser nulo se não achar)
     Task<EventResponse?> GetByIdAsync(Guid id);
+
+    Task<bool> BuyTicketAsync(Guid ticketId, string ownerName);
+    Task CreateTicketsAsync(Guid eventId, int quantity, decimal price);
 }
