@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # --- Banco de Dados (MySQL) ---
+  db:
+    image: mysql:8.0
+    container_name: meu-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: TicketFlowDb
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backup:/docker-entrypoint-initdb.d
+
+  # --- Cache (Redis) ---
+  redis:
+    image: redis:alpine
+    container_name: meu-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+
+  # --- Mensageria (RabbitMQ) ---
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: meu-rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"   # Porta para o App conectar
+      - "15672:15672" # Porta do Painel Admin (http://localhost:15672)
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+volumes:
+  mysql_data:
+  redis_data:
+  rabbitmq_data:

@@ -1,0 +1,16 @@
+/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Application/bin/Debug/net10.0/TicketFlow.Application.deps.json
+/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Application/bin/Debug/net10.0/TicketFlow.Application.dll
+/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Application/bin/Debug/net10.0/TicketFlow.Application.pdb
+/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Application/bin/Debug/net10.0/TicketFlow.Domain.dll
+/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Application/bin/Debug/net10.0/TicketFlow.Domain.pdb
+/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Application/obj/Debug/net10.0/TicketFlow.Application.csproj.AssemblyReference.cache
+/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Application/obj/Debug/net10.0/TicketFlow.Application.GeneratedMSBuildEditorConfig.editorconfig
+/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Application/obj/Debug/net10.0/TicketFlow.Application.AssemblyInfoInputs.cache
+/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Application/obj/Debug/net10.0/TicketFlow.Application.AssemblyInfo.cs
+/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Application/obj/Debug/net10.0/TicketFlow.Application.csproj.CoreCompileInputs.cache
+/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Application/obj/Debug/net10.0/TicketFlow.Application.sourcelink.json
+/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Application/obj/Debug/net10.0/TicketFl.167D723C.Up2Date
+/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Application/obj/Debug/net10.0/TicketFlow.Application.dll
+/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Application/obj/Debug/net10.0/refint/TicketFlow.Application.dll
+/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Application/obj/Debug/net10.0/TicketFlow.Application.pdb
+/home/tacio/Documentos/Dev/C#/TicketFlow/TicketFlow.Application/obj/Debug/net10.0/ref/TicketFlow.Application.dll
