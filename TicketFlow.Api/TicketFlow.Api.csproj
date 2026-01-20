@@ -21,4 +21,8 @@
     <ProjectReference Include="..\TicketFlow.Infrastructure\TicketFlow.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="BackgroundServices/" />
+  </ItemGroup>
+
 </Project>

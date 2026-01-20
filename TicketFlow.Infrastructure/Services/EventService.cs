@@ -17,13 +17,16 @@ public class EventService : IEventService
     private readonly AppDbContext _context;
     private readonly string _connectionString;
     private readonly IConnectionMultiplexer _redis;
+    private readonly IMessageBusService _bus;
 
-    public EventService(AppDbContext context, IConfiguration configuration, IConnectionMultiplexer redis)
+    public EventService(AppDbContext context, IConfiguration configuration, IConnectionMultiplexer redis
+    , IMessageBusService bus)
     {
         _context = context;
         // Se der erro de nulo aqui, garanta que a string não venha null
         _connectionString = configuration.GetConnectionString("DefaultConnection") ?? "";
         _redis = redis;
+        _bus = bus;
     }
 
     public async Task<EventResponse> CreateAsync(CreateEventRequest request)
@@ -89,6 +92,17 @@ public class EventService : IEventService
             // 3. Tenta Salvar
             // O EF Core vai gerar: UPDATE Tickets SET Status = 'Sold', Version = 'NOVO_GUID' WHERE Id = X AND Version = 'GUID_ANTIGO'
             await _context.SaveChangesAsync();
+
+            var mensagem = new 
+            { 
+                TicketId = ticket.Id, 
+                Owner = ownerName, 
+                Email = "cliente@teste.com", // Simulação
+                Date = DateTime.Now 
+            };
+            // Publicamos na fila chamada "ticket-sold-queue"
+             await _bus.PublishAsync("ticket-sold-queue", mensagem);
+
             return true;
         }
         catch (DbUpdateConcurrencyException)
