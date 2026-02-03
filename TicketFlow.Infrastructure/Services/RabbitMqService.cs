@@ -1,8 +1,8 @@
-using System;
 using TicketFlow.Application.Interfaces;
 using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
+using Microsoft.Extensions.Configuration;
 
 namespace TicketFlow.Infrastructure.Services;
 
@@ -11,12 +11,12 @@ public class RabbitMqService : IMessageBusService
     // Configurações básicas para rodar local (Docker)
     private readonly ConnectionFactory _factory;
 
-    public RabbitMqService()
+    public RabbitMqService(IConfiguration configuration)
     {
+        var host = configuration["RabbitMQ:Host"] ?? "localhost";
         _factory = new ConnectionFactory
         {
             HostName = "localhost"
-            // Se tivesse usuário/senha diferentes de 'guest', colocaria aqui
         };
     }
 

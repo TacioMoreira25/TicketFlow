@@ -13,6 +13,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketFlow.Infrastructure",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{6279C8B6-05E4-49CA-A657-0815A28DF2C8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{456D0B67-EFAD-49E4-918A-436586FEAF53}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{9790D59E-7A7A-487A-A4EE-944FBA3B7B14}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\..\Downloads\ci.yml = ..\..\..\..\Downloads\ci.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,5 +93,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9790D59E-7A7A-487A-A4EE-944FBA3B7B14} = {456D0B67-EFAD-49E4-918A-436586FEAF53}
 	EndGlobalSection
 EndGlobal

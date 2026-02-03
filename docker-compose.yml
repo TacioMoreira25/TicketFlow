@@ -1,46 +1,50 @@
-version: '3.8'
-
 services:
-  # --- Banco de Dados (MySQL) ---
-  db:
-    image: mysql:8.0
-    container_name: meu-mysql
-    restart: always
+  api:
+    build:
+      context: .
+      dockerfile: TicketFlow.Api/Dockerfile
+    restart: on-failure
+    ports:
+      - "5000:8080" 
     environment:
-      MYSQL_ROOT_PASSWORD: 123
-      MYSQL_DATABASE: TicketFlowDb
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-      - ./backup:/docker-entrypoint-initdb.d
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=mysql;Database=TicketFlow;Uid=root;Pwd=senhaForte123;
+      - RedisConnection=redis,abortConnect=false
+      - RabbitMQ__Host=rabbitmq
+      - Seq__Url=http://seq
+    depends_on:
+      - mysql
+      - rabbitmq
+      - redis
+      - seq
 
-  # --- Cache (Redis) ---
-  redis:
-    image: redis:alpine
-    container_name: meu-redis
-    restart: always
+  # 2. Banco de Dados
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: senhaForte123
+      MYSQL_DATABASE: TicketFlow
     ports:
-      - "6379:6379"
-    command: redis-server --appendonly yes
-    volumes:
-      - redis_data:/data
+      - "3307:3306"
 
-  # --- Mensageria (RabbitMQ) ---
+  # 3. Mensageria
   rabbitmq:
     image: rabbitmq:3-management
-    container_name: meu-rabbitmq
-    restart: always
     ports:
-      - "5672:5672"   # Porta para o App conectar
-      - "15672:15672" # Porta do Painel Admin (http://localhost:15672)
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
+      - "5672:5672"   # Protocolo
+      - "15672:15672" # Painel Visual
 
-volumes:
-  mysql_data:
-  redis_data:
-  rabbitmq_data:
+  # 4. Cache
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+  # 5. Logs
+  seq:
+    image: datalust/seq:latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SEQ_FIRSTRUN_ADMINPASSWORD=admin
+    ports:
+      - "5341:80"

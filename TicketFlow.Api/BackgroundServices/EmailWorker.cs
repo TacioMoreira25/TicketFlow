@@ -11,10 +11,11 @@ public class EmailWorker : BackgroundService
     private readonly ConnectionFactory _factory;
     private readonly ILogger<EmailWorker> _logger;
 
-    public EmailWorker(ILogger<EmailWorker> logger)
+    public EmailWorker(ILogger<EmailWorker> logger, IConfiguration configuration)
     {
         _logger = logger;
-        _factory = new ConnectionFactory { HostName = "localhost" };
+        var host = configuration["RabbitMQ:Host"] ?? "localhost";
+        _factory = new ConnectionFactory { HostName = host };
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
