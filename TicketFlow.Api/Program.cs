@@ -62,7 +62,7 @@ using (var scope = app.Services.CreateScope())
         
         context.Database.Migrate();
         
-        Log.Information("✅ Banco de dados migrado com sucesso!");
+        Log.Information("Banco de dados migrado com sucesso!");
     }
     catch (Exception ex)
     {

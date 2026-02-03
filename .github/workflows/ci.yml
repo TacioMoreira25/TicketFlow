@@ -1,0 +1,29 @@
+name: TicketFlow CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x 
+
+      - name: Restaurar Dependências
+        run: dotnet restore TicketFlow.sln
+
+      - name: Compilar (Build)
+        run: dotnet build TicketFlow.sln --no-restore --configuration Release
+
+      - name: Rodar Testes
+        run: dotnet test TicketFlow.sln --no-build --configuration Release --verbosity normal

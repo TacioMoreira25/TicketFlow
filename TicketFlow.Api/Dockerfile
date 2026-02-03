@@ -13,7 +13,6 @@ COPY . .
 WORKDIR "/src/TicketFlow.Api"
 RUN dotnet publish "TicketFlow.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-# Imagem mais leve, apenas para rodar
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
 EXPOSE 8080
