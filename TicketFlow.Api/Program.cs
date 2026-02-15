@@ -43,6 +43,9 @@ var app = builder.Build();
 
 app.UseSerilogRequestLogging();
 
+// Registre o GlobalExceptionMiddleware antes dos controllers
+app.UseMiddleware<GlobalExceptionMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
