@@ -5,6 +5,7 @@ using TicketFlow.Infrastructure.Services;
 using StackExchange.Redis;
 using TicketFlow.Api.BackgroundServices;
 using Serilog;
+using TicketFlow.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,7 +44,6 @@ var app = builder.Build();
 
 app.UseSerilogRequestLogging();
 
-// Registre o GlobalExceptionMiddleware antes dos controllers
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
