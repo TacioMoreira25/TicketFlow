@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using TicketFlow.Application.DTOs;
 using TicketFlow.Application.Interfaces;
@@ -9,16 +10,24 @@ namespace TicketFlow.Api.Controllers;
 public class EventsController : ControllerBase
 {
     private readonly IEventService _service;
+    private readonly IValidator<CreateEventRequest> _validator;
 
-    // Injetamos a Interface do Serviço
-    public EventsController(IEventService service)
+    // Injetamos a Interface do Serviço e o Validador
+    public EventsController(IEventService service, IValidator<CreateEventRequest> validator)
     {
         _service = service;
+        _validator = validator;
     }
 
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateEventRequest request)
     {
+        var validationResult = await _validator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors);
+        }
+
         var result = await _service.CreateAsync(request);
         // Retorna 201 Created
         return CreatedAtAction(nameof(GetAll), null, result);

@@ -1,3 +1,5 @@
+using FluentValidation;
+using TicketFlow.Application.Validators;
 using TicketFlow.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using TicketFlow.Application.Interfaces;
@@ -18,6 +20,7 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 builder.Services.AddControllers();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateEventValidator>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
