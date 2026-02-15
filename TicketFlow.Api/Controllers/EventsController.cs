@@ -12,7 +12,6 @@ public class EventsController : ControllerBase
     private readonly IEventService _service;
     private readonly IValidator<CreateEventRequest> _validator;
 
-    // Injetamos a Interface do Serviço e o Validador
     public EventsController(IEventService service, IValidator<CreateEventRequest> validator)
     {
         _service = service;

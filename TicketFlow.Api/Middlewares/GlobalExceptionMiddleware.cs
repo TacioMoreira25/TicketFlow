@@ -1,9 +1,7 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Text.Json;
-using System.Threading.Tasks;
 using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 
 namespace TicketFlow.Api.Middlewares
 {
@@ -27,13 +25,25 @@ namespace TicketFlow.Api.Middlewares
             catch (ValidationException ex)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+    
                 var problemDetails = new ProblemDetails
                 {
                     Status = (int)HttpStatusCode.BadRequest,
-                    Title = "One or more validation errors occurred.",
-                    Detail = ex.Message,
+                    Title = "Erro de validação",
+                    Detail = "Consulte o campo 'errors' para detalhes.", 
                     Type = "https://tools.ietf.org/html/rfc7807"
                 };
+
+                if (ex.Errors != null)
+                {
+                    problemDetails.Extensions["errors"] = ex.Errors
+                        .GroupBy(e => e.PropertyName)
+                        .ToDictionary(
+                            g => g.Key, 
+                            g => g.Select(e => e.ErrorMessage).ToArray()
+                        );
+                }
+
                 await WriteProblemDetailsAsync(context, problemDetails);
             }
             catch (Exception ex)
