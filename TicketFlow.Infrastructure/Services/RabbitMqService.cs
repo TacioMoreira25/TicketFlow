@@ -8,7 +8,6 @@ namespace TicketFlow.Infrastructure.Services;
 
 public class RabbitMqService : IMessageBusService
 {
-    // Configurações básicas para rodar local (Docker)
     private readonly ConnectionFactory _factory;
 
     public RabbitMqService(IConfiguration configuration)

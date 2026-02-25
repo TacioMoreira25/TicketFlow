@@ -32,31 +32,45 @@ O projeto segue os princípios da Clean Architecture, dividido em camadas para g
 
 ## Como Executar
 
-Pré-requisitos: Docker e Docker Compose instalados.
+### 1. Configuração
 
-1. Clone o repositório.
-2. Navegue até a pasta raiz do projeto.
-3. Execute o comando para subir o ambiente completo:
+Copie o exemplo de variáveis de ambiente e ajuste conforme necessário:
 
 ```bash
-docker-compose up -d --build
+cp .env.example .env
 ```
 
-O comando irá inicializar os containers da API, MySQL, RabbitMQ, Redis e Seq.
+### 2. Rodando com Docker
+
+Suba todo o ambiente (API + Banco + Mensageria + Cache + Logs) com um único comando:
+
+```bash
+docker compose up -d --build
+```
+A API estará disponível em: http://localhost:5000/swagger
+
+### 3. Rodando Híbrido 
+
+Para rodar a API localmente conectada à infraestrutura Docker:
+
+1.  Suba apenas a infraestrutura:
+    ```bash
+    docker compose up -d mysql redis rabbitmq seq
+    ```
+2.  Configure o `appsettings.Development.json` ou *User Secrets* com as credenciais do `.env`.
+3.  Execute as migrations:
+    ```bash
+    dotnet ef database update --project TicketFlow.Infrastructure --startup-project TicketFlow.Api
+    ```
+4.  Rode a API: `dotnet run --project TicketFlow.Api`
 
 ## Acesso aos Serviços
 
-Após a inicialização, os serviços estarão disponíveis nas seguintes portas:
+*   **Swagger:** [http://localhost:5000/swagger](http://localhost:5000/swagger)
+*   **RabbitMQ:** [http://localhost:15672](http://localhost:15672) (guest/guest)
+*   **Seq:** [http://localhost:5341](http://localhost:5341)
 
-* **API (Swagger):** http://localhost:5000/swagger
-* **RabbitMQ Management:** http://localhost:15672 (User: guest / Pass: guest)
-* **Seq (Logs):** http://localhost:5341
-
-## Testes Automatizados
-
-O projeto utiliza xUnit e Testcontainers para testes de integração, subindo containers reais de banco de dados para validar os cenários.
-
-Para rodar os testes:
+## Testes
 
 ```bash
 dotnet test

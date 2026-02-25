@@ -28,7 +28,6 @@ public class EventsController : ControllerBase
         }
 
         var result = await _service.CreateAsync(request);
-        // Retorna 201 Created
         return CreatedAtAction(nameof(GetAll), null, result);
     }
 
@@ -44,7 +43,6 @@ public class EventsController : ControllerBase
         }
         catch (Exception ex)
         {
-            // Retorna 409 Conflict - O código HTTP correto para "Tentei mas deu conflito"
             return Conflict(new { message = ex.Message });
         }
     }

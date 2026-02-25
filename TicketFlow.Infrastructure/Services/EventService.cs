@@ -47,7 +47,7 @@ public class EventService : IEventService
     public async Task<EventResponse?> GetByIdAsync(Guid id)
     {
         var dbRedis = _redis.GetDatabase();
-        string cacheKey = $"event:{id}"; // Ex: "event:550e8400-e29b..."
+        string cacheKey = $"event:{id}";
 
         // 1. Tenta pegar do Cache (Rápido)
         string? json = await dbRedis.StringGetAsync(cacheKey);
@@ -58,7 +58,7 @@ public class EventService : IEventService
             return JsonSerializer.Deserialize<EventResponse>(json);
         }
 
-        // 2. Não achou? Vai no MySQL (Lento)
+        // 2. Não achou? Vai no MySQL
         using IDbConnection db = new MySqlConnection(_connectionString);
         string sql = "SELECT Id, Title, Date, Description FROM Events WHERE Id = @Id";
         var evento = await db.QueryFirstOrDefaultAsync<EventResponse>(sql, new { Id = id });
@@ -78,7 +78,7 @@ public class EventService : IEventService
 
     public async Task<bool> BuyTicketAsync(Guid ticketId, string ownerName)
     {
-        // 1. Busca o ingresso pelo EF Core (com rastreamento)
+        // 1. Busca o ingresso pelo EF Core
         var ticket = await _context.Tickets.FirstOrDefaultAsync(t => t.Id == ticketId);
 
         if (ticket == null) return false;
@@ -86,18 +86,16 @@ public class EventService : IEventService
         try
         {
             // 2. Tenta vender (Regra de Negócio)
-            // Dentro do método Sell(), a gente atualiza o Guid "Version"
             ticket.Sell(ownerName);
             
             // 3. Tenta Salvar
-            // O EF Core vai gerar: UPDATE Tickets SET Status = 'Sold', Version = 'NOVO_GUID' WHERE Id = X AND Version = 'GUID_ANTIGO'
             await _context.SaveChangesAsync();
 
             var mensagem = new 
             { 
                 TicketId = ticket.Id, 
                 Owner = ownerName, 
-                Email = "cliente@teste.com", // Simulação
+                Email = "cliente@teste.com",
                 Date = DateTime.Now 
             };
             // Publicamos na fila chamada "ticket-sold-queue"
@@ -108,7 +106,6 @@ public class EventService : IEventService
         catch (DbUpdateConcurrencyException)
         {
             // 4. Captura o conflito!
-            // Significa que entre o passo 1 e o 3, alguém mudou esse registro.
             throw new Exception("Desculpe, este ingresso foi vendido para outra pessoa no último segundo.");
         }
     }
@@ -119,11 +116,8 @@ public class EventService : IEventService
 
         for (int i = 0; i < quantity; i++)
         {
-            // Cria o ticket vinculado ao evento
             tickets.Add(new Ticket(eventId, price));
         }
-
-        // AddRange é muito mais rápido que adicionar um por um
         await _context.Tickets.AddRangeAsync(tickets);
         await _context.SaveChangesAsync();
     }

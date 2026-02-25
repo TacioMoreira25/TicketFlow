@@ -11,8 +11,6 @@ public class Ticket
     public TicketStatus Status { get; private set; }
     public string? OwnerName { get; private set; }
 
-    // O SEGREDO DA CONCORRÊNCIA
-    // Esse campo garante que o EF Core detecte se alguém mexeu no registro antes de nós.
     [ConcurrencyCheck]
     public Guid Version { get; set; } = Guid.NewGuid();
 
