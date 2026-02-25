@@ -9,4 +9,5 @@ public interface IEventService
     Task<EventResponse?> GetByIdAsync(Guid id);
     Task<bool> BuyTicketAsync(Guid ticketId, string ownerName);
     Task CreateTicketsAsync(Guid eventId, int quantity, decimal price);
+    Task<IEnumerable<TicketResponse>> GetAvailableTicketsAsync(Guid eventId);
 }

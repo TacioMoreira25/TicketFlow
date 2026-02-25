@@ -78,17 +78,19 @@ public class EventService : IEventService
 
     public async Task<bool> BuyTicketAsync(Guid ticketId, string ownerName)
     {
-        // 1. Busca o ingresso pelo EF Core
-        var ticket = await _context.Tickets.FirstOrDefaultAsync(t => t.Id == ticketId);
-
-        if (ticket == null) return false;
+        using var transaction = await _context.Database.BeginTransactionAsync();
 
         try
         {
+            // 1. Busca o ingresso pelo EF Core
+            var ticket = await _context.Tickets.FirstOrDefaultAsync(t => t.Id == ticketId);
+
+            if (ticket == null) return false;
+
             // 2. Tenta vender (Regra de Negócio)
             ticket.Sell(ownerName);
             
-            // 3. Tenta Salvar
+            // 3. Tenta Salvar (mas ainda dentro da transação)
             await _context.SaveChangesAsync();
 
             var mensagem = new 
@@ -98,15 +100,27 @@ public class EventService : IEventService
                 Email = "cliente@teste.com",
                 Date = DateTime.Now 
             };
-            // Publicamos na fila chamada "ticket-sold-queue"
+            
+            // 4. Publica na fila RabbitMQ
+            // Se falhar aqui, vai para o catch e faz rollback no banco
              await _bus.PublishAsync("ticket-sold-queue", mensagem);
+
+            // 5. Confirma a transação apenas se tudo der certo
+            await transaction.CommitAsync();
 
             return true;
         }
         catch (DbUpdateConcurrencyException)
         {
-            // 4. Captura o conflito!
+            // Ocorreu conflito de concorrência
+            await transaction.RollbackAsync();
             throw new Exception("Desculpe, este ingresso foi vendido para outra pessoa no último segundo.");
+        }
+        catch (Exception)
+        {
+            // Qualquer outro erro (banco ou RabbitMQ), desfaz tudo
+            await transaction.RollbackAsync();
+            throw; // Repassa o erro para o Controller tratar
         }
     }
 
@@ -120,5 +134,12 @@ public class EventService : IEventService
         }
         await _context.Tickets.AddRangeAsync(tickets);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<TicketResponse>> GetAvailableTicketsAsync(Guid eventId)
+    {
+        using IDbConnection db = new MySqlConnection(_connectionString);
+        string sql = "SELECT Id, Price FROM Tickets WHERE EventId = @EventId AND Status = 1";
+        return await db.QueryAsync<TicketResponse>(sql, new { EventId = eventId });
     }
 }

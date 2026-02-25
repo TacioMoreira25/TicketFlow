@@ -75,4 +75,11 @@ public class EventsController : ControllerBase
 
         return Ok(evento);
     }
+
+    [HttpGet("{id}/tickets/available")]
+    public async Task<IActionResult> GetAvailableTickets(Guid id)
+    {
+        var tickets = await _service.GetAvailableTicketsAsync(id);
+        return Ok(tickets);
+    }
 }
