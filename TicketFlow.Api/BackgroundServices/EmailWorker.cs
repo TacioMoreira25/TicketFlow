@@ -13,11 +13,13 @@ public class EmailWorker : BackgroundService
     public EmailWorker(ILogger<EmailWorker> logger, IConfiguration configuration)
     {
         _logger = logger;
-        var rabbitConnectionString = configuration.GetConnectionString("rabbitmq-bus") ?? "";
-        _factory = new ConnectionFactory 
-        { 
-            Uri = new Uri(rabbitConnectionString)
-        };
+        var rabbitConnectionString = configuration.GetConnectionString("rabbitmq-bus");
+        
+        if (string.IsNullOrEmpty(rabbitConnectionString))
+        {
+            rabbitConnectionString = "amqp://localhost:5672";
+        }
+        _factory = new ConnectionFactory { Uri = new Uri(rabbitConnectionString) };
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)

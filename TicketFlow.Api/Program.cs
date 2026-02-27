@@ -28,9 +28,14 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("redis-cache") ?? "";
+    var redisConnectionString = builder.Configuration.GetConnectionString("redis-cache") ?? "";
 
-    var configuration = ConfigurationOptions.Parse(connectionString, true);
+    if (string.IsNullOrEmpty(redisConnectionString))
+    {
+        redisConnectionString = "localhost";
+    }
+
+    var configuration = ConfigurationOptions.Parse(redisConnectionString, true);
     
     configuration.AbortOnConnectFail = false;
     

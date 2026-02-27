@@ -15,6 +15,11 @@ public class RabbitMqService : IMessageBusService
         var rabbitConnectionString = configuration.GetConnectionString("rabbitmq-bus") ?? "";
         var user = configuration["RabbitMQ:UserName"] ?? "guest";
         var pass = configuration["RabbitMQ:Password"] ?? "guest";
+
+        if (string.IsNullOrEmpty(rabbitConnectionString))
+        {
+            rabbitConnectionString = "amqp://localhost:5672";
+        }
         
         _factory = new ConnectionFactory
         {
