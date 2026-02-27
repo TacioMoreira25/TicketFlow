@@ -12,13 +12,13 @@ public class RabbitMqService : IMessageBusService
 
     public RabbitMqService(IConfiguration configuration)
     {
-        var host = configuration["RabbitMQ:Host"] ?? "localhost";
+        var rabbitConnectionString = configuration.GetConnectionString("rabbitmq-bus") ?? "";
         var user = configuration["RabbitMQ:UserName"] ?? "guest";
         var pass = configuration["RabbitMQ:Password"] ?? "guest";
         
         _factory = new ConnectionFactory
         {
-            HostName = host,
+            Uri = new Uri(rabbitConnectionString),
             UserName = user,
             Password = pass
         };

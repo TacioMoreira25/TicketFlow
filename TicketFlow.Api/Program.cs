@@ -11,6 +11,8 @@ using TicketFlow.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
 var seqUrl = builder.Configuration["Seq:Url"] ?? "http://localhost:5341";
 
 Log.Logger = new LoggerConfiguration()
@@ -26,8 +28,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 {
-    var connectionString = builder.Configuration["RedisConnection"] ?? "localhost";
-    
+    var connectionString = builder.Configuration.GetConnectionString("redis-cache") ?? "";
+
     var configuration = ConfigurationOptions.Parse(connectionString, true);
     
     configuration.AbortOnConnectFail = false;
@@ -45,7 +47,8 @@ builder.Services.AddCors(options =>
     });
 });
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("ticketflow-db");
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString,new MySqlServerVersion(new Version(8, 0, 30))));
 

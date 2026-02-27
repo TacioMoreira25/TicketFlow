@@ -24,7 +24,7 @@ public class EventService : IEventService
     {
         _context = context;
         // Se der erro de nulo aqui, garanta que a string não venha null
-        _connectionString = configuration.GetConnectionString("DefaultConnection") ?? "";
+        _connectionString = configuration.GetConnectionString("ticketflow-db") ?? "";
         _redis = redis;
         _bus = bus;
     }
