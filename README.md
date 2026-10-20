@@ -4,31 +4,29 @@ API para gestão de eventos e venda de ingressos, focada em escalabilidade, perf
 
 ## Tecnologias Utilizadas
 
-- .NET 10 (Preview)
+- .NET 8 / .NET 9 LTS (C# 12/13)
 - ASP.NET Core Web API
 - Entity Framework Core
-- MySQL (Persistência de dados)
+- MySQL (Persistência relacional transacional)
 - Redis (Cache distribuído)
 - RabbitMQ (Mensageria assíncrona)
 - Docker & Docker Compose
-- xUnit & Testcontainers (Testes de integração)
+- xUnit & Testcontainers (Testes de integração conteinerizados)
 
-## Arquitetura
+## Arquitetura e Engenharia de Concorrência
 
-O projeto segue os princípios da Clean Architecture, dividido em camadas para garantir a separação de responsabilidades:
+O projeto segue os princípios da **Clean Architecture** e **SOLID**, com separação estrita de camadas e foco em resiliência:
 
-- **TicketFlow.Api**: Camada de entrada (Controllers, Configurações).
-- **TicketFlow.Application**: Casos de uso, DTOs e Interfaces.
-- **TicketFlow.Domain**: Entidades, Regras de negócio e Validações.
-- **TicketFlow.Infrastructure**: Implementação de acesso a dados, serviços externos (Redis/RabbitMQ) e Repositórios.
+- **TicketFlow.Api**: Camada de entrada (Controllers, Injeção de Dependências e Middlewares).
+- **TicketFlow.Application**: Casos de uso (Use Cases), DTOs e Interfaces de serviços.
+- **TicketFlow.Domain**: Entidades ricas, Regras de negócio e Validações de domínio.
+- **TicketFlow.Infrastructure**: Acesso a dados (EF Core), adaptadores externos (Redis/RabbitMQ) e Repositórios.
 
-## Funcionalidades Principais
-
-- Gerenciamento de Eventos (Criação e Listagem).
-- Venda de Ingressos com controle de concorrência (Optimistic Concurrency).
-- Processamento assíncrono de confirmações de venda via fila.
-- Cache de consultas frequentes para redução de carga no banco de dados.
-- Logs estruturados e centralizados (Seq).
+### 🛡️ Tratamento de Alta Concorrência (Venda de Ingressos)
+Para mitigar condições de corrida (*race conditions*) e compras simultâneas do último ingresso (*overbooking*):
+1. **Controle de Concorrência Otimista (Optimistic Concurrency):** Uso de tokens de versão (`RowVersion`) gerenciados pelo Entity Framework Core sobre o MySQL.
+2. **Desacoplamento Assíncrono com Mensageria:** Confirmações de pagamento e emissão de ingressos são despachadas para o **RabbitMQ**, garantindo que picos de tráfego sejam absorvidos sem sobrecarregar o banco de dados relacional.
+3. **Cache de Baixa Latência:** Consultas frequentes de disponibilidade de eventos são cacheadas via **Redis**, reduzindo drasticamente leituras repetitivas no banco.
 
 ## Como Executar
 
