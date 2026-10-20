@@ -4,7 +4,7 @@ API para gestão de eventos e venda de ingressos, focada em escalabilidade, perf
 
 ## Tecnologias Utilizadas
 
-- .NET 8 / .NET 9 LTS (C# 12/13)
+- .NET 8 LTS (C# 12)
 - ASP.NET Core Web API
 - Entity Framework Core
 - MySQL (Persistência relacional transacional)
