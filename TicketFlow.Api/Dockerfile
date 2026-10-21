@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 COPY ["TicketFlow.Api/TicketFlow.Api.csproj", "TicketFlow.Api/"]
@@ -13,7 +13,7 @@ COPY . .
 WORKDIR "/src/TicketFlow.Api"
 RUN dotnet publish "TicketFlow.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 EXPOSE 8080
 
