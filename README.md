@@ -1,75 +1,89 @@
 # TicketFlow
 
-API para gestão de eventos e venda de ingressos, focada em escalabilidade, performance e tratamento de concorrência. O projeto utiliza processamento assíncrono e cache distribuído para lidar com alto volume de requisições.
+> **API RESTful em .NET 8 LTS para gestão de eventos e venda de ingressos sob alta concorrência — prevenindo *overbooking* com Optimistic Concurrency, mensageria assíncrona (RabbitMQ), cache distribuído (Redis) e testes reais com Testcontainers.**
 
-## Tecnologias Utilizadas
+[![TicketFlow CI](https://github.com/TacioMoreira25/TicketFlow/actions/workflows/ci.yml/badge.svg)](https://github.com/TacioMoreira25/TicketFlow/actions/workflows/ci.yml)
+![.NET 8](https://img.shields.io/badge/.NET_8_LTS-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
+![C#](https://img.shields.io/badge/C%23_12-239120?style=for-the-badge&logo=csharp&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)
+![RabbitMQ](https://img.shields.io/badge/RabbitMQ-FF6600?style=for-the-badge&logo=rabbitmq&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
-- .NET 8 LTS (C# 12)
-- ASP.NET Core Web API
-- Entity Framework Core
-- MySQL (Persistência relacional transacional)
-- Redis (Cache distribuído)
-- RabbitMQ (Mensageria assíncrona)
-- Docker & Docker Compose
-- xUnit & Testcontainers (Testes de integração conteinerizados)
+---
 
-## Arquitetura e Engenharia de Concorrência
+## Arquitetura & Fluxo de Alta Concorrência
 
-O projeto segue os princípios da **Clean Architecture** e **SOLID**, com separação estrita de camadas e foco em resiliência:
+O projeto segue **Clean Architecture** e **SOLID**, separando estritamente domínio, casos de uso e infraestrutura:
 
-- **TicketFlow.Api**: Camada de entrada (Controllers, Injeção de Dependências e Middlewares).
-- **TicketFlow.Application**: Casos de uso (Use Cases), DTOs e Interfaces de serviços.
-- **TicketFlow.Domain**: Entidades ricas, Regras de negócio e Validações de domínio.
-- **TicketFlow.Infrastructure**: Acesso a dados (EF Core), adaptadores externos (Redis/RabbitMQ) e Repositórios.
+```mermaid
+flowchart LR
+    Client["Cliente / Load Test"] -->|HTTP REST| API["TicketFlow.Api\n(.NET 8 + Swagger)"]
+    API -->|Consulta Disponibilidade| Redis["Redis Cache\n(Baixa Latência)"]
+    API -->|Reserva / Transação| MySQL["MySQL\n(Optimistic Lock: RowVersion)"]
+    API -->|Publica Evento de Pedido| RMQ["RabbitMQ\n(Mensageria Assíncrona)"]
+    RMQ -->|Processamento Desacoplado| Worker["Consumer / Emissão"]
+    API -.->|Logs Estruturados| Seq["Seq Observability"]
+```
 
-### 🛡️ Tratamento de Alta Concorrência (Venda de Ingressos)
-Para mitigar condições de corrida (*race conditions*) e compras simultâneas do último ingresso (*overbooking*):
-1. **Controle de Concorrência Otimista (Optimistic Concurrency):** Uso de tokens de versão (`RowVersion`) gerenciados pelo Entity Framework Core sobre o MySQL.
-2. **Desacoplamento Assíncrono com Mensageria:** Confirmações de pagamento e emissão de ingressos são despachadas para o **RabbitMQ**, garantindo que picos de tráfego sejam absorvidos sem sobrecarregar o banco de dados relacional.
-3. **Cache de Baixa Latência:** Consultas frequentes de disponibilidade de eventos são cacheadas via **Redis**, reduzindo drasticamente leituras repetitivas no banco.
+### Organização em Camadas
+- **`TicketFlow.Domain`**: Entidades ricas, regras de negócio, invariantes de domínio e controle de versão (`RowVersion`).
+- **`TicketFlow.Application`**: Casos de uso (*Use Cases*), DTOs e contratos/interfaces desacoplados da infraestrutura.
+- **`TicketFlow.Infrastructure`**: Persistência com Entity Framework Core (MySQL), adaptadores de cache (Redis) e mensageria (RabbitMQ).
+- **`TicketFlow.Api`**: Controllers REST, middlewares globais, injeção de dependências e documentação OpenAPI/Swagger.
+- **`Tests`**: Suíte de testes automatizados (xUnit + FluentAssertions + **Testcontainers** subindo containers reais no CI).
+
+---
+
+## Decisões Técnicas & Trade-offs
+
+| Problema de Engenharia | Decisão Adotada | Por que esta escolha (Trade-off)? |
+| :--- | :--- | :--- |
+| **Condição de corrida (*Overbooking*)** na compra simultânea do último ingresso | **Optimistic Concurrency** (`RowVersion` via EF Core sobre MySQL) | Mantém alta vazão de leitura sem bloquear linhas no banco sob picos de tráfego, falhando de forma controlada (`DbUpdateConcurrencyException`) em conflitos simultâneos. |
+| **Picos de requisições** na confirmação e emissão de ingressos | **Desacoplamento assíncrono via RabbitMQ** | Evita travar o ciclo HTTP esperando processamento secundário, absorvendo rajadas de tráfego com filas duráveis. |
+| **Leituras repetitivas** de disponibilidade de eventos | **Cache distribuído com Redis** | Reduz a pressão de I/O no banco relacional em consultas quentes de catálogo/disponibilidade. |
+| **Mocks frágeis** que mascaram bugs de concorrência em testes | **Testcontainers (MySQL real no Docker)** | O provedor `EF Core In-Memory` não valida `RowVersion` nem constraints relacionais reais; Testcontainers garante validação fiel no GitHub Actions. |
+
+---
 
 ## Como Executar
 
 ### 1. Configuração
-
-Copie o exemplo de variáveis de ambiente e ajuste conforme necessário:
-
+Copie o arquivo de variáveis de ambiente:
 ```bash
 cp .env.example .env
 ```
 
-### 2. Rodando com Docker
-
-Suba todo o ambiente (API + Banco + Mensageria + Cache + Logs) com um único comando:
-
+### 2. Rodando com Docker (Stack Completa)
+Suba API, MySQL, Redis, RabbitMQ e Seq com um único comando:
 ```bash
 docker compose up -d --build
 ```
-A API estará disponível em: http://localhost:5000/swagger
 
-### 3. Rodando Híbrido 
+### 3. Rodando Híbrido (Infra Docker + API Local)
+1. Suba a infraestrutura:
+   ```bash
+   docker compose up -d mysql redis rabbitmq seq
+   ```
+2. Aplique as migrations:
+   ```bash
+   dotnet ef database update --project TicketFlow.Infrastructure --startup-project TicketFlow.Api
+   ```
+3. Inicie a API:
+   ```bash
+   dotnet run --project TicketFlow.Api
+   ```
 
-Para rodar a API localmente conectada à infraestrutura Docker:
+### Acesso aos Serviços
+- **Swagger UI:** `http://localhost:5000/swagger`
+- **RabbitMQ Management:** `http://localhost:15672` (`guest` / `guest`)
+- **Seq (Logs Estruturados):** `http://localhost:5341`
 
-1.  Suba apenas a infraestrutura:
-    ```bash
-    docker compose up -d mysql redis rabbitmq seq
-    ```
-2.  Configure o `appsettings.Development.json` ou *User Secrets* com as credenciais do `.env`.
-3.  Execute as migrations:
-    ```bash
-    dotnet ef database update --project TicketFlow.Infrastructure --startup-project TicketFlow.Api
-    ```
-4.  Rode a API: `dotnet run --project TicketFlow.Api`
+---
 
-## Acesso aos Serviços
+## Testes Automatizados
 
-*   **Swagger:** [http://localhost:5000/swagger](http://localhost:5000/swagger)
-*   **RabbitMQ:** [http://localhost:15672](http://localhost:15672) (guest/guest)
-*   **Seq:** [http://localhost:5341](http://localhost:5341)
-
-## Testes
-
+Requer Docker ativo para execução dos testes de integração com Testcontainers:
 ```bash
-dotnet test
+dotnet test TicketFlow.sln
 ```
